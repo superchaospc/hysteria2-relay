@@ -82,17 +82,7 @@ Hysteria2 在以下场景**性能远不如 VLESS+REALITY**，请使用我们的�
 
 ## 🏗️ 架构
 
-```
-┌──────────────┐     hysteria2://     ┌──────────────┐    SOCKS5 (TCP)    ┌─────────────────┐
-│   客户端     │ ──── (UDP/QUIC) ───► │   中转 VPS   │ ─────────────────► │  住宅 SOCKS5    │
-│ (境外网络)   │      :443/8443+      │ (美/日/欧)   │                    │  (任意目标国家) │
-└──────────────┘                      └──────────────┘                    └─────────────────┘
-                                              │
-                                              ├─ hysteria-server@node-1 (端口 443)  → SOCKS5-A
-                                              ├─ hysteria-server@node-2 (端口 8443) → SOCKS5-B
-                                              ├─ hysteria-server@node-3 (端口 8444) → VPS 直连
-                                              └─ ...
-```
+![Hysteria2 Relay Architecture](assets/architecture.svg)
 
 - 每个 `hysteria-server@node-N` 是独立的 systemd 实例，监听不同 UDP 端口
 - 每个实例的配置文件是 `/etc/hysteria/node-N.yaml`，挂掉只影响自己
@@ -122,11 +112,12 @@ chmod +x /root/hysteria2_deploy.sh
 ### 首次部署流程
 
 1. 选菜单 **1) 全新安装**
-2. 脚本依次完成：系统更新 → 安装 Hysteria2 → 自签证书 → 系统优化（BBR + UDP 缓冲区）
-3. 提示输入住宅 SOCKS5 节点（格式 `IP:PORT:USER:PASS`），可输入多个，每个一行，输入 `done` 结束
-4. 如果暂时没有住宅 SOCKS5，可直接输入 `done`，脚本会询问是否创建一个 443 端口的 VPS 直连节点作为起点
-5. 部署完成后自动显示每个节点的 `hysteria2://` 链接 + 终端二维码
-6. 链接也保存在 `/root/hysteria_nodes_info.txt`，方便后续查看
+2. 脚本先准备系统依赖：默认只更新软件源并安装必要依赖；如需完整系统升级，可在提示时输入 `y`
+3. 脚本继续完成：安装 Hysteria2 → 自签证书 → 系统优化（BBR + UDP 缓冲区）
+4. 提示输入住宅 SOCKS5 节点（格式 `IP:PORT:USER:PASS`），可输入多个，每个一行，输入 `done` 结束
+5. 如果暂时没有住宅 SOCKS5，可直接输入 `done`，脚本会询问是否创建一个 443 端口的 VPS 直连节点作为起点
+6. 部署完成后自动显示每个节点的 `hysteria2://` 链接 + 终端二维码
+7. 链接也保存在 `/root/hysteria_nodes_info.txt`，方便后续查看
 
 ---
 

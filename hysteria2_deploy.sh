@@ -249,27 +249,45 @@ apply_firewall_port() {
     fi
 }
 
-# ========== 更新操作系统 ==========
+# ========== 准备系统依赖 ==========
 update_system() {
-    echo -e "${GREEN}[步骤0] 更新操作系统...${NC}"
+    echo -e "${GREEN}[步骤0] 准备系统依赖...${NC}"
+    echo -e "${CYAN}默认只更新软件源并安装必要依赖，不做系统完整升级。${NC}"
+    echo -e "${YELLOW}如需升级全部系统包，可能会更新内核并需要重启 VPS。${NC}"
+    read -p "是否执行系统完整升级？(y/N): " DO_FULL_UPGRADE
 
     if command -v apt &>/dev/null; then
         export DEBIAN_FRONTEND=noninteractive
         apt update -y
-        apt upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+        if [ "$DO_FULL_UPGRADE" = "y" ] || [ "$DO_FULL_UPGRADE" = "Y" ]; then
+            apt upgrade -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
+            apt autoremove -y
+            echo -e "  ${GREEN}✓ 系统包已完整升级 (apt)${NC}"
+        else
+            echo -e "  ${YELLOW}已跳过系统完整升级，仅安装必要依赖${NC}"
+        fi
         apt install -y curl python3 iproute2 ca-certificates openssl
-        apt autoremove -y
-        echo -e "  ${GREEN}✓ 系统已更新 (apt)${NC}"
+        echo -e "  ${GREEN}✓ 依赖已就绪 (apt)${NC}"
     elif command -v dnf &>/dev/null; then
-        dnf update -y
+        if [ "$DO_FULL_UPGRADE" = "y" ] || [ "$DO_FULL_UPGRADE" = "Y" ]; then
+            dnf update -y
+            echo -e "  ${GREEN}✓ 系统包已完整升级 (dnf)${NC}"
+        else
+            echo -e "  ${YELLOW}已跳过系统完整升级，仅安装必要依赖${NC}"
+        fi
         dnf install -y curl python3 iproute ca-certificates openssl
-        echo -e "  ${GREEN}✓ 系统已更新 (dnf)${NC}"
+        echo -e "  ${GREEN}✓ 依赖已就绪 (dnf)${NC}"
     elif command -v yum &>/dev/null; then
-        yum update -y
+        if [ "$DO_FULL_UPGRADE" = "y" ] || [ "$DO_FULL_UPGRADE" = "Y" ]; then
+            yum update -y
+            echo -e "  ${GREEN}✓ 系统包已完整升级 (yum)${NC}"
+        else
+            echo -e "  ${YELLOW}已跳过系统完整升级，仅安装必要依赖${NC}"
+        fi
         yum install -y curl python3 iproute ca-certificates openssl
-        echo -e "  ${GREEN}✓ 系统已更新 (yum)${NC}"
+        echo -e "  ${GREEN}✓ 依赖已就绪 (yum)${NC}"
     else
-        echo -e "  ${YELLOW}⚠ 未识别的包管理器，跳过系统更新${NC}"
+        echo -e "  ${YELLOW}⚠ 未识别的包管理器，跳过依赖安装${NC}"
     fi
 
     if ! command -v python3 &>/dev/null; then
