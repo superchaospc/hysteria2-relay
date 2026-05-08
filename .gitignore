@@ -1,0 +1,28 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Local test artifacts
+*.log
+*.tmp
+test/
+tmp/
+
+# Backup files
+*.bak
+*.orig
+
+# Local secrets (never commit credentials)
+nodes_info.txt
+.nodes_meta.json
+*.crt
+*.key
+*.pem
