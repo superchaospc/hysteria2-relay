@@ -100,7 +100,7 @@ show_qrcode() {
 
     echo ""
     echo -e "${GREEN}┌─ 扫码导入 [${name}] ──────────────────────────${NC}"
-    echo -e "${CYAN}  Shadowrocket / NekoBox / Hiddify / V2rayNG 均可扫码${NC}"
+    echo -e "${CYAN}  Shadowrocket / NekoBox / v2rayNG / v2rayN 均可扫码${NC}"
     echo ""
     qrencode -t ANSIUTF8 -m 2 "$link" || {
         echo -e "${RED}  二维码生成失败${NC}"

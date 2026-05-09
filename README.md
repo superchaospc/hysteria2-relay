@@ -41,7 +41,7 @@ hysteria2-relay
 - **systemd 实例隔离**：每个节点独立运行、独立重启，单节点异常不影响其他节点
 - **BBR + UDP 调优**：自动启用 BBR 并调整 QUIC 需要的系统参数
 - **流量统计 + 邮件报警**：查看 1 小时 / 今天 / 7 天 / 30 天流量，节点异常可自动重启并发邮件
-- **扫码即导入**：自动生成 `hysteria2://` 链接和终端二维码，支持 Shadowrocket / NekoBox / Hiddify / sing-box / Clash Meta / V2rayN
+- **扫码即导入**：自动生成 `hysteria2://` 链接和终端二维码，支持 Shadowrocket / NekoBox / v2rayNG / v2rayN；sing-box / Clash Meta 可按 Hysteria2 配置格式手动填写
 
 ## 📚 目录
 
@@ -115,7 +115,7 @@ Hysteria2 在以下场景**性能远不如 VLESS+REALITY**，请使用我们的�
 - **BBR + UDP 缓冲区调优**：自动启用 BBR 拥塞控制，调整 `net.core.rmem_max` 等内核参数到适合 QUIC 的尺寸
 - **流量统计**：基于 Hysteria2 内置 `trafficStats` API，每节点独立统计上下行流量，每 5 分钟落库，保留 60 天历史，支持「过去 1 小时 / 今天 / 过去 7 天 / 过去 30 天」分时段查询
 - **监控报警**：邮件通知（支持 Gmail / QQ / 163 等 SMTP），支持节点掉线自动重启 + 报警去重（30 分钟内同一报警不重复发送）
-- **终端二维码**：每次部署 / 添加 / 改端口后自动渲染 ANSI 二维码，扫码即导入到 Shadowrocket / NekoBox / Hiddify
+- **终端二维码**：每次部署 / 添加 / 改端口后自动渲染 ANSI 二维码，扫码即导入到 Shadowrocket / NekoBox / v2rayNG / v2rayN
 - **跨发行版兼容**：Debian / Ubuntu / CentOS / AlmaLinux / Rocky / Fedora 一键部署，自动识别 `apt` / `dnf` / `yum`
 - **防火墙自动放行**：自动检测 UFW / firewalld / iptables 并放行节点的 UDP 端口
 - **特殊字符安全**：SOCKS5 用户名/密码含 `:` `@` `#` `*` `"` `\` 等特殊字符也能正确写入 YAML 配置（用 JSON 字符串编码兜底）
@@ -211,7 +211,7 @@ Hysteria2 协议本身是单进程单监听端口（不像 Xray 那样原生支�
 如果你不确定，先两个仓库都部署测一下，挑快的用。
 
 **Q: 想把 sing-box / Clash Meta 当客户端，能用吗？**
-可以。`hysteria2://` URL 是通用格式，sing-box / Clash Meta / Stash / Surge / NekoBox / Hiddify / V2rayN / Shadowrocket 都原生支持。直接粘贴链接或扫二维码即可。
+可以，但不要把“协议支持”和“扫码导入 `hysteria2://`”混为一谈。sing-box 支持 Hysteria2 outbound，需要写成 `type: "hysteria2"` 的 JSON 配置；Clash Meta 也需要按它自己的 Hysteria2 节点格式填写。脚本输出的 `hysteria2://` 链接更适合 Shadowrocket / NekoBox / v2rayNG / v2rayN 等支持该分享 URI 的客户端扫码或粘贴导入。
 
 **Q: 防火墙问题怎么排查？**
 菜单 7 排错诊断会自动检测 UFW / firewalld / iptables 三种防火墙是否放行了节点的 UDP 端口。如果显示未放行：
