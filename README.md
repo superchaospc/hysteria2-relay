@@ -1,17 +1,59 @@
-# hysteria2-relay
+# Hysteria2 Relay
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Shell](https://img.shields.io/badge/Shell-Bash-1f425f.svg)](https://www.gnu.org/software/bash/)
-[![Hysteria2](https://img.shields.io/badge/Hysteria-2.x-blue.svg)](https://github.com/apernet/hysteria)
-[![Platform](https://img.shields.io/badge/Platform-Debian%20%7C%20Ubuntu%20%7C%20CentOS%20%7C%20AlmaLinux%20%7C%20Fedora-lightgrey.svg)]()
-[![GitHub release](https://img.shields.io/github/v/release/superchaospc/hysteria2-relay)](https://github.com/superchaospc/hysteria2-relay/releases)
-[![GitHub stars](https://img.shields.io/github/stars/superchaospc/hysteria2-relay?style=social)](https://github.com/superchaospc/hysteria2-relay/stargazers)
+<p align="center">
+  <strong>Hysteria2 一键部署脚本：VPS 中转到住宅 SOCKS5 出口，多节点、流量统计、邮件报警、终端二维码一次搞定。</strong>
+</p>
 
-VPS 上一键部署 **Hysteria2 (QUIC/UDP)** 中转到住宅 SOCKS5 出口节点的 Bash 脚本。支持多节点、每节点独立 systemd 实例、开机自启、流量统计、监控报警，以及生成的 `hysteria2://` 链接自动渲染终端二维码，方便 Shadowrocket / NekoBox / Hiddify / V2rayN / Stash 等客户端直接扫码导入。
+<p align="center">
+  <a href="https://github.com/superchaospc/hysteria2-relay/releases"><img alt="Release" src="https://img.shields.io/github/v/release/superchaospc/hysteria2-relay"></a>
+  <a href="https://opensource.org/licenses/MIT"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
+  <a href="https://www.gnu.org/software/bash/"><img alt="Shell: Bash" src="https://img.shields.io/badge/Shell-Bash-1f425f.svg"></a>
+  <img alt="Platform" src="https://img.shields.io/badge/Platform-Debian%20%7C%20Ubuntu%20%7C%20CentOS%20%7C%20AlmaLinux%20%7C%20Fedora-lightgrey.svg">
+</p>
+
+<p align="center">
+  <a href="./README.md">简体中文</a> · <a href="./README_EN.md">English</a> · <a href="https://github.com/superchaospc/hysteria2-relay/releases">Releases</a>
+</p>
+
+---
+
+## 🚀 一键安装
+
+```bash
+curl -fsSL https://github.com/superchaospc/hysteria2-relay/releases/latest/download/hysteria2_deploy.sh -o /root/hysteria2_deploy.sh
+chmod +x /root/hysteria2_deploy.sh
+/root/hysteria2_deploy.sh
+```
+
+也可以安装到 `/usr/local/bin/`，以后直接输入 `hysteria2-relay` 打开菜单：
+
+```bash
+curl -fsSL https://github.com/superchaospc/hysteria2-relay/releases/latest/download/hysteria2_deploy.sh -o /usr/local/bin/hysteria2-relay
+chmod +x /usr/local/bin/hysteria2-relay
+hysteria2-relay
+```
 
 > ⚠️ **免责声明**：本项目仅供学习研究网络协议与系统运维使用。请用户遵守所在国家/地区的法律法规，自行承担使用后果。作者不对使用本脚本造成的任何直接或间接损失负责。
 
----
+## ✨ 你会得到什么
+
+- **多节点 Hysteria2 中转**：一台 VPS 跑多个独立 UDP 端口，每个端口对应一个住宅 SOCKS5 出口
+- **systemd 实例隔离**：每个节点独立运行、独立重启，单节点异常不影响其他节点
+- **BBR + UDP 调优**：自动启用 BBR 并调整 QUIC 需要的系统参数
+- **流量统计 + 邮件报警**：查看 1 小时 / 今天 / 7 天 / 30 天流量，节点异常可自动重启并发邮件
+- **扫码即导入**：自动生成 `hysteria2://` 链接和终端二维码，支持 Shadowrocket / NekoBox / Hiddify / sing-box / Clash Meta / V2rayN
+
+## 📚 目录
+
+- [适用场景](#-适用场景)
+- [功能特性](#-功能特性)
+- [架构](#️-架构)
+- [首次部署流程](#首次部署流程)
+- [菜单功能清单](#-菜单功能清单)
+- [关键文件位置](#-关键文件位置)
+- [常见问题](#-常见问题)
+- [与 xray-relay 的关系](#-与-xray-relay-的关系)
+
 
 ## ⭐ 适用场景
 
@@ -93,21 +135,6 @@ Hysteria2 在以下场景**性能远不如 VLESS+REALITY**，请使用我们的�
 Hysteria2 协议本身是单进程单监听端口（不像 Xray 那样原生支持多 inbound）。多实例方案是官方推荐做法，配置隔离更清晰，单节点故障不会拖累其他节点。
 
 ---
-
-## 📦 一键安装
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/superchaospc/hysteria2-relay/main/hysteria2_deploy.sh -o /root/hysteria2_deploy.sh
-chmod +x /root/hysteria2_deploy.sh
-/root/hysteria2_deploy.sh
-```
-
-> 也可以放到 `/usr/local/bin/` 让以后能直接 `hysteria2-relay` 一行命令打开菜单：
-> ```bash
-> curl -fsSL https://raw.githubusercontent.com/superchaospc/hysteria2-relay/main/hysteria2_deploy.sh -o /usr/local/bin/hysteria2-relay
-> chmod +x /usr/local/bin/hysteria2-relay
-> hysteria2-relay
-> ```
 
 ### 首次部署流程
 

@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hysteria2 Relay Social Preview</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 1280px;
+      height: 640px;
+      margin: 0;
+      overflow: hidden;
+      background: #071015;
+      color: #f4fbff;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      display: grid;
+      place-items: stretch;
+    }
+
+    .preview {
+      position: relative;
+      width: 1280px;
+      height: 640px;
+      padding: 72px 84px;
+      background:
+        linear-gradient(115deg, rgba(8, 21, 27, 0.98), rgba(9, 28, 36, 0.94) 44%, rgba(11, 15, 23, 0.98)),
+        radial-gradient(circle at 78% 24%, rgba(73, 217, 177, 0.2), transparent 28%),
+        radial-gradient(circle at 86% 76%, rgba(77, 157, 255, 0.16), transparent 32%);
+    }
+
+    .grid {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, 0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.055) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: linear-gradient(90deg, black, transparent 78%);
+      opacity: 0.7;
+    }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      width: 760px;
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: #8debd6;
+      font-size: 28px;
+      font-weight: 760;
+      letter-spacing: 0;
+      margin-bottom: 26px;
+    }
+
+    .mark {
+      display: grid;
+      place-items: center;
+      width: 54px;
+      height: 54px;
+      border: 2px solid rgba(141, 235, 214, 0.8);
+      border-radius: 8px;
+      background: rgba(141, 235, 214, 0.12);
+      color: #ffffff;
+      font-size: 30px;
+      font-weight: 900;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 82px;
+      line-height: 0.98;
+      font-weight: 900;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 28px 0 0;
+      color: #cde8ee;
+      font-size: 32px;
+      line-height: 1.35;
+      font-weight: 650;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 40px;
+      width: 880px;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      min-height: 42px;
+      padding: 0 18px;
+      border: 1px solid rgba(214, 237, 243, 0.24);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #e9f7fa;
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .terminal {
+      position: absolute;
+      right: 76px;
+      top: 86px;
+      width: 390px;
+      height: 468px;
+      border: 1px solid rgba(179, 228, 239, 0.22);
+      border-radius: 8px;
+      background: rgba(3, 9, 13, 0.86);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.42);
+      overflow: hidden;
+    }
+
+    .terminal-bar {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      height: 42px;
+      padding: 0 18px;
+      background: rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #ff675f;
+    }
+
+    .dot:nth-child(2) {
+      background: #ffc75f;
+    }
+
+    .dot:nth-child(3) {
+      background: #51d87e;
+    }
+
+    .terminal-body {
+      padding: 26px;
+      color: #d9f8ef;
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 21px;
+      line-height: 1.55;
+    }
+
+    .prompt {
+      color: #8debd6;
+    }
+
+    .muted {
+      color: #87a5ad;
+    }
+
+    .ok {
+      color: #78f0a0;
+    }
+
+    .link {
+      color: #7bbdff;
+    }
+
+    .footer {
+      position: absolute;
+      left: 84px;
+      bottom: 56px;
+      color: #8ba8af;
+      font-size: 22px;
+      font-weight: 650;
+    }
+  </style>
+</head>
+<body>
+  <main class="preview" aria-label="Hysteria2 Relay social preview">
+    <div class="grid"></div>
+    <section class="content">
+      <div class="eyebrow"><span class="mark">H2</span> Hysteria2 Relay</div>
+      <h1>一键部署<br>住宅出口中转</h1>
+      <p class="subtitle">VPS 中转到 SOCKS5 住宅代理，多节点 systemd 实例、BBR 调优、流量统计、邮件报警、扫码导入。</p>
+      <div class="chips">
+        <span class="chip">QUIC / UDP</span>
+        <span class="chip">SOCKS5 Outbound</span>
+        <span class="chip">Shadowrocket</span>
+        <span class="chip">NekoBox</span>
+        <span class="chip">sing-box</span>
+        <span class="chip">Clash Meta</span>
+      </div>
+    </section>
+
+    <aside class="terminal" aria-hidden="true">
+      <div class="terminal-bar">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+      <div class="terminal-body">
+        <span class="prompt">root@vps:~#</span> curl -fsSL \<br>
+        <span class="link">releases/latest/download</span><br>
+        <span class="muted">install hysteria2...</span><br>
+        <span class="ok">OK</span> systemd node-1<br>
+        <span class="ok">OK</span> BBR enabled<br>
+        <span class="ok">OK</span> traffic stats<br>
+        <span class="ok">OK</span> QR code ready<br><br>
+        <span class="muted">Scan and connect.</span>
+      </div>
+    </aside>
+
+    <div class="footer">github.com/superchaospc/hysteria2-relay</div>
+  </main>
+</body>
+</html>
